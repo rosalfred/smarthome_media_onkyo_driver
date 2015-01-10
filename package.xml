@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<package>
+  <name>media_onkyo_ip_driver</name>
+  <version>0.1.8</version>
+  <description>This package is for interfacing Onkyo sound system (by JEISP API) to ROS. This package is part of Alfred Assistant stack.</description>
+  <maintainer email="erwan.lehuitouze@gmail.com">Erwan Le Huitouze</maintainer>
+  <license>GPLv3</license>
+  <url type="website">https://support.tactfactory.com/projects/medialfred/wiki/Wiki</url>
+  <author email="erwan.lehuitouze@gmail.com">Erwan Le Huitouze</author>
+
+
+  <!-- The *_depend tags are used to specify dependencies -->
+  <!-- Dependencies can be catkin packages or system dependencies -->
+  <!-- Examples: -->
+  <!-- Use build_depend for packages you need at compile time: -->
+  <!--   <build_depend>message_generation</build_depend> -->
+  <!-- Use buildtool_depend for build tool packages: -->
+  <!--   <buildtool_depend>catkin</buildtool_depend> -->
+  <!-- Use run_depend for packages you need at runtime: -->
+  <!--   <run_depend>message_runtime</run_depend> -->
+  <!-- Use test_depend for packages you need only for testing: -->
+  <!--   <test_depend>gtest</test_depend> -->
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>media_driver</build_depend>
+  <build_depend>rosjava_dynamic_reconfigure</build_depend>
+  <build_depend>rosjava_build_tools</build_depend>
+
+  <run_depend>media_driver</run_depend>
+  <run_depend>rosjava_dynamic_reconfigure</run_depend>
+  
+  <run_depend>libjoda-time-java</run_depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- You can specify that this package is a metapackage here: -->
+    <!-- <metapackage/> -->
+
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

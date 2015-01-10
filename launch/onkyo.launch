@@ -1,0 +1,16 @@
+<!-- This is a sample launch file, please change it based on your needs -->
+
+<launch>
+    <!-- DRIVERS -->
+    <node pkg="media_onkyo_driver"
+            name="onkyo_salon"
+            type="media_onkyo_driver"
+            args="com.alfred.ros.onkyo.OnkyoNode"
+            output="screen">
+        <param name="rate" value="1" />
+        <param name="mac" value="" />
+        <param name="ip" value="192.168.0.12" />
+        <param name="port" value="60128" />
+        <param name="tf_prefix" value="onkyo_salon" />
+    </node>
+</launch>
