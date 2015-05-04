@@ -29,7 +29,7 @@
   <run_depend>media_driver</run_depend>
   <run_depend>rosjava_dynamic_reconfigure</run_depend>
   
-  <run_depend>libjoda-time-java</run_depend>
+  <!--run_depend>libjoda-time-java</run_depend-->
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
