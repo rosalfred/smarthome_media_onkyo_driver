@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>media_onkyo_ip_driver</name>
-  <version>0.1.29</version>
+  <version>0.1.30</version>
   <description>This package is for interfacing Onkyo sound system (by JEISP API) to ROS. This package is part of Alfred Assistant stack.</description>
   <maintainer email="erwan.lehuitouze@gmail.com">Erwan Le Huitouze</maintainer>
   <license>GPLv3</license>
