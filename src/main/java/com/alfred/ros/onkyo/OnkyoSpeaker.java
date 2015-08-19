@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Alfred package.
+ *
+ * (c) Mickael Gaillard <mick.gaillard@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.alfred.ros.onkyo;
 
 import media_msgs.MediaAction;
@@ -15,18 +23,20 @@ import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
 /**
  * Onkyo Speaker module.
  *
+ * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
+ *
  */
 public class OnkyoSpeaker implements ISpeaker {
 	/**
 	 * Onkyo node.
 	 */
 	private OnkyoNode onkyoNode;
-	
+
 	/**
 	 * Onkyo eiscp.
 	 */
 	private OnkyoEiscp onkyoEiscp;
-	
+
 	/**
 	 * OnkyoSpeaker constructor.
 	 * @param onkyoEiscp {@link OnkyoEiscp} onkyo eiscp
@@ -36,7 +46,7 @@ public class OnkyoSpeaker implements ISpeaker {
 		this.onkyoEiscp = onkyoEiscp;
 		this.onkyoNode = onkyoNode;
 	}
-	
+
 	@Override
 	public void load(SpeakerInfo speakerInfo) {
 		String muted = this.onkyoEiscp.sendCommand(
@@ -45,26 +55,26 @@ public class OnkyoSpeaker implements ISpeaker {
 				EiscpCommmandsConstants.MASTER_VOLUME_QUERY_ISCP);
 		String channel = this.onkyoEiscp.sendCommand(
 				EiscpCommmandsConstants.INPUT_SELECTOR_QUERY_ISCP);
-		
+
 		speakerInfo.setMuted(muted.equals(
 				EiscpCommmandsConstants.AUDIO_MUTING_ON_ISCP));
-		
+
 		int vol = 0;
 		//eiscp return MVL (master volume) + volume in hex from 0 to 64 (0-100)
 		if (volume.length() >= 0 && volume.startsWith(
 				EiscpCommmandsConstants.MASTER_VOLUME_ISCP)) {
 			vol = Integer.valueOf(volume.substring(volume.length() - 2), 16);
 		}
-		
+
 		speakerInfo.setLevel(vol);
 		speakerInfo.setChannel(channel);
 	}
-	
+
 	@Override
 	public void callbackCmdAction(MediaAction message, StateData stateData) {
 		this.onkyoNode.logD("Onkyo Speaker launch command : "
 				+ message.getMethod());
-		
+
 		switch (message.getMethod()) {
 			case OP_MUTE:
 			case OP_MUTE_TOGGLE:
@@ -94,21 +104,21 @@ public class OnkyoSpeaker implements ISpeaker {
 				break;
 		}
 	}
-	
+
 	@Override
 	public void handleSpeakerMuteToggle(ToggleMuteSpeakerRequest request,
 			ToggleMuteSpeakerResponse response) {
 		response.setState(!this.onkyoNode.getStateData().getSpeaker().getMuted());
-		
+
 		this.onkyoNode.logI(String.format("Service call %s : %s",
 				OnkyoNode.SRV_MUTE_SPEAKER_TOGGLE,
 				this.onkyoNode.getStateData().getSpeaker().getMuted()));
-		
+
 		MediaAction message = this.onkyoNode.getNode().getTopicMessageFactory()
 				.newFromType(MediaAction._TYPE);
-		
+
 		message.setMethod(OnkyoSpeaker.OP_MUTE_TOGGLE);
-		
+
 		this.callbackCmdAction(message, this.onkyoNode.getStateData());
 	}
 }

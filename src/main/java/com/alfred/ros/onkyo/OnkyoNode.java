@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Alfred package.
+ *
+ * (c) Mickael Gaillard <mick.gaillard@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.alfred.ros.onkyo;
 
 import media_msgs.StateData;
@@ -21,6 +29,8 @@ import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
 /**
  * Onkyo ROS Node.
  *
+ * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
+ *
  */
 public class OnkyoNode extends BaseMediaNodeMain
         implements ReconfigureListener<OnkyoConfig> {
@@ -38,7 +48,7 @@ public class OnkyoNode extends BaseMediaNodeMain
     	super.onStart(connectedNode);
         this.startFinal();
     }
-    
+
 
     @Override
     public void onShutdown(Node node) {
@@ -46,7 +56,7 @@ public class OnkyoNode extends BaseMediaNodeMain
     }
 
     /**
-     * 
+     *
      * @return Current {@link StateData}
      */
     public StateData getStateData() {
@@ -63,13 +73,13 @@ public class OnkyoNode extends BaseMediaNodeMain
         this.speaker = new OnkyoSpeaker(this.onkyoEiscp, this);
         this.system = new OnkyoSystem(this.onkyoEiscp, this);
     }
-    
+
     @Override
     protected void refreshStateData() throws InterruptedException {
         if (!this.onkyoEiscp.isConnected()) {
             this.isConnected = false;
         }
-        
+
         super.refreshStateData();
     }
 
@@ -82,7 +92,7 @@ public class OnkyoNode extends BaseMediaNodeMain
 
         String response = this.onkyoEiscp.sendCommand(
                 EiscpCommmandsConstants.SYSTEM_POWER_QUERY_ISCP);
-        
+
         if (response != null &&
                 response.equals(EiscpCommmandsConstants.SYSTEM_POWER_ON_ISCP)) {
             this.stateData.setState(StateData.INIT);
@@ -90,7 +100,7 @@ public class OnkyoNode extends BaseMediaNodeMain
             this.logI("\tConnected done.");
         } else {
             this.stateData.setState(StateData.SHUTDOWN);
-            
+
             try {
                 Thread.sleep(10000 / this.rate);
             } catch (InterruptedException e) {
@@ -159,7 +169,7 @@ public class OnkyoNode extends BaseMediaNodeMain
         this.rate = config.getInteger(OnkyoConfig.RATE, this.rate);
         return config;
     }
-    
+
     public ConnectedNode getNode() {
         return this.connectedNode;
     }
