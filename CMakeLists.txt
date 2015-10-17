@@ -3,7 +3,12 @@ cmake_minimum_required(VERSION 2.8.3)
 project(media_onkyo_ip_driver)
 set(PACKAGE_PATH "com/alfred/ros")
 
-find_package(catkin REQUIRED rosjava_build_tools)
+find_package(catkin REQUIRED
+  rosjava_build_tools
+
+  media_driver
+  alfred_launch
+)
 
 catkin_rosjava_setup(publishMavenJavaPublicationToMavenRepository installApp)
 
