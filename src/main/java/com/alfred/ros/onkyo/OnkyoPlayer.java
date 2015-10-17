@@ -9,7 +9,6 @@
 package com.alfred.ros.onkyo;
 
 import media_msgs.MediaAction;
-import media_msgs.PlayerInfo;
 import media_msgs.StateData;
 
 import com.alfred.ros.media.IPlayer;
@@ -45,12 +44,13 @@ public class OnkyoPlayer implements IPlayer {
 	}
 
 	@Override
-	public void load(PlayerInfo playerInfo) {
-
-	}
-
-	@Override
 	public void callbackCmdAction(MediaAction message, StateData stateData) {
 
 	}
+
+    @Override
+    public void load(StateData stateData) {
+        // TODO Auto-generated method stub
+
+    }
 }

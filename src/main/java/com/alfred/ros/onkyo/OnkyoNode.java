@@ -8,6 +8,7 @@
  */
 package com.alfred.ros.onkyo;
 
+import media_msgs.MediaAction;
 import media_msgs.StateData;
 import media_msgs.ToggleMuteSpeaker;
 import media_msgs.ToggleMuteSpeakerRequest;
@@ -20,9 +21,10 @@ import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.service.ServiceResponseBuilder;
 
-import com.alfred.ros.media.BaseMediaNodeMain;
+import com.alfred.ros.core.BaseNodeMain;
+import com.alfred.ros.media.MediaMessageConverter;
+import com.alfred.ros.media.MediaStateDataComparator;
 import com.alfred.ros.onkyo.eiscp.OnkyoEiscp;
-
 import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
 
 
@@ -32,15 +34,19 @@ import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public class OnkyoNode extends BaseMediaNodeMain
-        implements ReconfigureListener<OnkyoConfig> {
+public class OnkyoNode extends BaseNodeMain<OnkyoConfig, StateData, MediaAction> {
 
     public static final String SRV_MUTE_SPEAKER_TOGGLE = "speaker_mute_toggle";
 
     private OnkyoEiscp onkyoEiscp;
+    private OnkyoSpeaker speaker;
 
-    static {
-        nodeName = "onkyo";
+    public OnkyoNode() {
+        super("onkyo",
+                new MediaStateDataComparator(),
+                new MediaMessageConverter(),
+                MediaAction._TYPE,
+                StateData._TYPE);
     }
 
     @Override
@@ -49,111 +55,79 @@ public class OnkyoNode extends BaseMediaNodeMain
         this.startFinal();
     }
 
-
     @Override
     public void onShutdown(Node node) {
         super.onShutdown(node);
     }
 
-    /**
-     *
-     * @return Current {@link StateData}
-     */
-    public StateData getStateData() {
-        return this.stateData;
+    @Override
+    protected void onConnected() {
+        this.getStateData().setState(StateData.ENABLE);
+    }
+
+    @Override
+    protected void onDisconnected() {
+        this.getStateData().setState(StateData.UNKNOWN);
+    }
+
+    @Override
+    public void onNewMessage(MediaAction message) {
+        if (message != null) {
+            this.logI(String.format("Command \"%s\"... for %s",
+                    message.getMethod(),
+                    message.getUri()));
+
+            super.onNewMessage(message);
+        }
     }
 
     @Override
     protected void initialize() {
         super.initialize();
 
-        this.onkyoEiscp = new OnkyoEiscp(this.host, this.port);
+        this.onkyoEiscp = new OnkyoEiscp(this.configuration.getHost(), this.configuration.getPort());
 
-        this.player = new OnkyoPlayer(this.onkyoEiscp, this);
+        this.addModule(new OnkyoPlayer(this.onkyoEiscp, this));
+//        this.addModule(new OnkyoSpeaker(this.onkyoEiscp, this));
         this.speaker = new OnkyoSpeaker(this.onkyoEiscp, this);
-        this.system = new OnkyoSystem(this.onkyoEiscp, this);
-    }
-
-    @Override
-    protected void refreshStateData() throws InterruptedException {
-        if (!this.onkyoEiscp.isConnected()) {
-            this.isConnected = false;
-        }
-
-        super.refreshStateData();
+        this.addModule(new OnkyoSystem(this.onkyoEiscp, this));
     }
 
     /**
      * Try to connect the node to Onkyo receiver.
      */
     @Override
-    protected void connect() {
-        this.logI(String.format("Connecting to %s:%s...", this.host, this.port));
+    protected boolean connect() {
+        boolean isConnected = false;
+        this.logI(String.format("Connecting to %s:%s...", this.configuration.getHost(), this.configuration.getPort()));
 
         String response = this.onkyoEiscp.sendCommand(
                 EiscpCommmandsConstants.SYSTEM_POWER_QUERY_ISCP);
 
         if (response != null &&
                 response.equals(EiscpCommmandsConstants.SYSTEM_POWER_ON_ISCP)) {
-            this.stateData.setState(StateData.INIT);
-            this.isConnected = true;
+            this.getStateData().setState(StateData.INIT);
+            isConnected = true;
             this.logI("\tConnected done.");
         } else {
-            this.stateData.setState(StateData.SHUTDOWN);
+            this.getStateData().setState(StateData.SHUTDOWN);
 
             try {
-                Thread.sleep(10000 / this.rate);
+                Thread.sleep(10000 / this.configuration.getRate());
             } catch (InterruptedException e) {
                 this.logE(e);
             }
         }
-    }
 
-    /**
-     * Load config from ros master (launch file).
-     */
-    @Override
-    protected void loadParameters() {
-        this.logI("Load parameters.");
-
-        this.prefix = String.format("/%s/", this.connectedNode.getParameterTree()
-                .getString("~tf_prefix", "onkyo_salon"));
-        this.logI(String.format("prefix :", this.prefix));
-
-        this.fixedFrame = this.connectedNode.getParameterTree()
-                .getString("~fixed_frame", "fixed_frame");
-        this.logI(String.format("fixedFrame :", this.fixedFrame));
-
-        this.rate = this.connectedNode.getParameterTree()
-                .getInteger("~" + OnkyoConfig.RATE, 1);
-
-        if (this.rate <= 0) {
-            this.rate = 1;
-        }
-
-        this.logI(String.format("rate :", this.rate));
-
-        this.mac = this.connectedNode.getParameterTree()
-                .getString("~mac", "00:01:2E:BC:16:33");
-        this.logI(String.format("mac :", this.mac));
-
-        this.host = this.connectedNode.getParameterTree()
-                .getString("~ip", "192.168.0.12");
-        this.logI(String.format("ip :", this.host));
-
-        this.port = this.connectedNode.getParameterTree()
-                .getInteger("~port", 60128);
-        this.logI(String.format("port :", this.port));
-
-        this.serverReconfig = new Server<OnkyoConfig>(connectedNode, new OnkyoConfig(connectedNode), this);
+        return isConnected;
     }
 
     /**
      * Initialize all node services.
      */
     protected void initServices() {
-        this.connectedNode.newServiceServer(
-                this.prefix + SRV_MUTE_SPEAKER_TOGGLE,
+        this.getConnectedNode().newServiceServer(
+                this.configuration.getPrefix() + SRV_MUTE_SPEAKER_TOGGLE,
                 ToggleMuteSpeaker._TYPE,
                 new ServiceResponseBuilder<ToggleMuteSpeakerRequest, ToggleMuteSpeakerResponse>() {
                     @Override
@@ -165,12 +139,7 @@ public class OnkyoNode extends BaseMediaNodeMain
     }
 
     @Override
-    public OnkyoConfig onReconfigure(OnkyoConfig config, int level) {
-        this.rate = config.getInteger(OnkyoConfig.RATE, this.rate);
-        return config;
-    }
-
-    public ConnectedNode getNode() {
-        return this.connectedNode;
+    protected OnkyoConfig getConfig() {
+        return new OnkyoConfig(this.getConnectedNode());
     }
 }

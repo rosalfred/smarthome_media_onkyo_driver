@@ -11,7 +11,7 @@ package com.alfred.ros.onkyo;
 import media_msgs.MediaAction;
 import media_msgs.StateData;
 
-import com.alfred.ros.media.ISystem;
+import com.alfred.ros.core.ISystem;
 import com.alfred.ros.onkyo.eiscp.OnkyoEiscp;
 
 import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
@@ -22,7 +22,7 @@ import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public class OnkyoSystem implements ISystem {
+public class OnkyoSystem implements ISystem<StateData, MediaAction> {
 	/**
 	 * Onkyo node.
 	 */

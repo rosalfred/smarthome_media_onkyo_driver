@@ -48,6 +48,10 @@ public class OnkyoSpeaker implements ISpeaker {
 	}
 
 	@Override
+	public void load(StateData stateData) {
+	    this.load(stateData.getSpeaker());
+	}
+
 	public void load(SpeakerInfo speakerInfo) {
 		String muted = this.onkyoEiscp.sendCommand(
 				EiscpCommmandsConstants.AUDIO_MUTING_QUERY_ISCP);
@@ -114,7 +118,7 @@ public class OnkyoSpeaker implements ISpeaker {
 				OnkyoNode.SRV_MUTE_SPEAKER_TOGGLE,
 				this.onkyoNode.getStateData().getSpeaker().getMuted()));
 
-		MediaAction message = this.onkyoNode.getNode().getTopicMessageFactory()
+		MediaAction message = this.onkyoNode.getConnectedNode().getTopicMessageFactory()
 				.newFromType(MediaAction._TYPE);
 
 		message.setMethod(OnkyoSpeaker.OP_MUTE_TOGGLE);
