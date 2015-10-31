@@ -2,5 +2,5 @@
 //this is needed because repository contains multipackage and cause problem with release
 rootProject.name = 'media_onkyo_ip_driver'
 
-include '..:media_driver', '..:media_msgs_java'
-include 'lib:jeiscp'
+include '..:rosjava_dynamic_reconfigure' ,'..:network_zeroconf',
+    '..:media_driver', 'lib:jeiscp'
