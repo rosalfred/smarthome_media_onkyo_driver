@@ -5,7 +5,7 @@
     <node pkg="media_onkyo_driver"
             name="onkyo_salon"
             type="media_onkyo_driver"
-            args="com.alfred.ros.onkyo.OnkyoNode"
+            args="org.rosmultimedia.player.onkyo.OnkyoNode"
             output="screen">
         <param name="rate" value="1" />
         <param name="mac" value="" />

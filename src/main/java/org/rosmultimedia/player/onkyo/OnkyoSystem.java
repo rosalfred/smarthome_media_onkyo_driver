@@ -6,16 +6,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.alfred.ros.onkyo;
+package org.rosmultimedia.player.onkyo;
 
-import media_msgs.MediaAction;
-import media_msgs.StateData;
-
-import com.alfred.ros.core.ISystem;
-import com.alfred.ros.onkyo.eiscp.OnkyoEiscp;
+import org.rosbuilding.common.ISystem;
+import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
 
 import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
 
+import media_msgs.MediaAction;
+import media_msgs.StateData;
 /**
  * Onkyo System module.
  *

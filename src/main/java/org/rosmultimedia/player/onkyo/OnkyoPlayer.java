@@ -6,13 +6,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.alfred.ros.onkyo;
+package org.rosmultimedia.player.onkyo;
+
+import org.rosbuilding.common.media.IPlayer;
+import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
 
 import media_msgs.MediaAction;
 import media_msgs.StateData;
-
-import com.alfred.ros.media.IPlayer;
-import com.alfred.ros.onkyo.eiscp.OnkyoEiscp;
 
 /**
  * Onkyo Player module.

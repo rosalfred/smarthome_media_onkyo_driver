@@ -45,7 +45,7 @@ defaultTasks 'install', 'installApp'
 
 mainClassName = 'org.ros.RosRun'
 
-group = 'com.alfred.ros'
+group = 'org.rosmultimedia.player'
 
 allprojects {
     version = project.catkin.pkg.version
@@ -53,11 +53,12 @@ allprojects {
 
 dependencies {
     compile 'org.ros.rosjava_core:rosjava:[0,)'
+    compile 'org.ros.rosjava_messages:rosbuilding_msgs:[0,)'
     compile 'org.ros.rosjava_messages:media_msgs:[0,)'
     compile 'joda-time:joda-time:2.3'
 
     compile 'org.ros.rosjava:rosjava_dynamic_reconfigure:[0,)'
-    compile 'com.alfred.ros:media_driver:[0,)'
+    compile 'org.rosbuilding:common_driver:[0,)'
 
     compile project(':lib:jeiscp')
 

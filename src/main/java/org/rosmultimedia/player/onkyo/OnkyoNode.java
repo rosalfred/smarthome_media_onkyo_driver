@@ -6,26 +6,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.alfred.ros.onkyo;
+package org.rosmultimedia.player.onkyo;
 
+import org.ros.exception.ServiceException;
+import org.ros.node.ConnectedNode;
+import org.ros.node.Node;
+import org.ros.node.service.ServiceResponseBuilder;
+import org.rosbuilding.common.BaseNodeMain;
+import org.rosbuilding.common.media.MediaMessageConverter;
+import org.rosbuilding.common.media.MediaStateDataComparator;
+import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
+
+import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
 import media_msgs.MediaAction;
 import media_msgs.StateData;
 import media_msgs.ToggleMuteSpeaker;
 import media_msgs.ToggleMuteSpeakerRequest;
 import media_msgs.ToggleMuteSpeakerResponse;
-
-import org.ros.dynamic_reconfigure.server.Server;
-import org.ros.dynamic_reconfigure.server.Server.ReconfigureListener;
-import org.ros.exception.ServiceException;
-import org.ros.node.ConnectedNode;
-import org.ros.node.Node;
-import org.ros.node.service.ServiceResponseBuilder;
-
-import com.alfred.ros.core.BaseNodeMain;
-import com.alfred.ros.media.MediaMessageConverter;
-import com.alfred.ros.media.MediaStateDataComparator;
-import com.alfred.ros.onkyo.eiscp.OnkyoEiscp;
-import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
 
 
 /**

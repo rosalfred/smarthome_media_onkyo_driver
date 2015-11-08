@@ -22,10 +22,10 @@
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>media_driver</build_depend>
+  <build_depend>common_driver</build_depend>
   <build_depend>rosjava_build_tools</build_depend>
 
-  <run_depend>media_driver</run_depend>
+  <run_depend>common_driver</run_depend>
 
   <!--run_depend>libjoda-time-java</run_depend-->
 
