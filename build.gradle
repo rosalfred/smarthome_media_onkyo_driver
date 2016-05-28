@@ -53,7 +53,7 @@ allprojects {
 
 dependencies {
     compile 'org.ros.rosjava_core:rosjava:[0,)'
-    compile 'org.ros.rosjava_messages:rosbuilding_msgs:[0,)'
+    //compile 'org.ros.rosjava_messages:building_msgs:[0,)'
     compile 'org.ros.rosjava_messages:media_msgs:[0,)'
     compile 'joda-time:joda-time:2.3'
 
