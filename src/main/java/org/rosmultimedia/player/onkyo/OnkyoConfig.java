@@ -33,7 +33,7 @@ public class OnkyoConfig extends NodeConfig {
         super.loadParameters();
 
         this.mac = this.connectedNode.getParameterTree()
-                .getString("~mac", "00:01:2E:BC:16:33");
+                .getString("~mac", "00:00:00:00:00:00");
         this.host = this.connectedNode.getParameterTree()
                 .getString("~ip", "192.168.0.12");
         this.port = this.connectedNode.getParameterTree()
