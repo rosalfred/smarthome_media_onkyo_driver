@@ -13,8 +13,9 @@ import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
 
 import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
 
-import media_msgs.MediaAction;
-import media_msgs.StateData;
+import smarthome_media_msgs.MediaAction;
+import smarthome_media_msgs.StateData;
+
 /**
  * Onkyo System module.
  *

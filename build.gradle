@@ -53,17 +53,17 @@ allprojects {
 
 dependencies {
     compile 'org.ros.rosjava_core:rosjava:[0,)'
-    //compile 'org.ros.rosjava_messages:building_msgs:[0,)'
-    compile 'org.ros.rosjava_messages:media_msgs:[0,)'
+    //compile 'org.ros.rosjava_messages:smarthome_comm_msgs:[0,)'
+    compile 'org.ros.rosjava_messages:smarthome_media_msgs:[0,)'
     compile 'joda-time:joda-time:2.3'
 
     compile 'org.ros.rosjava:rosjava_dynamic_reconfigure:[0,)'
-    compile 'org.rosbuilding:common_driver:[0,)'
+    compile 'org.rosbuilding:smarthome_common_driver:[0,)'
 
     compile project(':lib:jeiscp')
 
     //compile project('..:rosjava_dynamic_reconfigure')
-    //compile project('..:media_driver')
+    //compile project('..:smarthome_common_driver')
 
     runtime fileTree(dir: 'libs', include: '*.jar')
 }

@@ -11,8 +11,8 @@ package org.rosmultimedia.player.onkyo;
 import org.rosbuilding.common.media.IPlayer;
 import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
 
-import media_msgs.MediaAction;
-import media_msgs.StateData;
+import smarthome_media_msgs.MediaAction;
+import smarthome_media_msgs.StateData;
 
 /**
  * Onkyo Player module.

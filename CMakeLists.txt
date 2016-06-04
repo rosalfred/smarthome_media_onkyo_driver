@@ -6,7 +6,7 @@ set(PACKAGE_PATH "org/rosmultimedia/player")
 find_package(catkin REQUIRED
   rosjava_build_tools
 
-  common_driver
+  smarthome_common_driver
 )
 
 catkin_rosjava_setup(publishMavenJavaPublicationToMavenRepository installApp)

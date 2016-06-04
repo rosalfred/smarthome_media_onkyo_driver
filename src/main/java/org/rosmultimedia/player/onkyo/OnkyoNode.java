@@ -18,11 +18,11 @@ import org.rosbuilding.common.media.MediaStateDataComparator;
 import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
 
 import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
-import media_msgs.MediaAction;
-import media_msgs.StateData;
-import media_msgs.ToggleMuteSpeaker;
-import media_msgs.ToggleMuteSpeakerRequest;
-import media_msgs.ToggleMuteSpeakerResponse;
+import smarthome_media_msgs.MediaAction;
+import smarthome_media_msgs.StateData;
+import smarthome_media_msgs.ToggleMuteSpeaker;
+import smarthome_media_msgs.ToggleMuteSpeakerRequest;
+import smarthome_media_msgs.ToggleMuteSpeakerResponse;
 
 
 /**
