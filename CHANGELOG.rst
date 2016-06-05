@@ -2,8 +2,8 @@
 Changelog for package smarthome_media_onkyo_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.63 (2016-06-05)
+-------------------
 * Clean package xml
 * Update package dependencies
   Update messages packages names
