@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <package>
-  <name>media_onkyo_ip_driver</name>
+  <name>smarthome_media_onkyo_driver</name>
   <version>0.1.62</version>
   <description>This package is for interfacing Onkyo sound system (by JEISP API) to ROS. This package is part of Alfred Assistant stack.</description>
 
-  <maintainer email="mick.gaillard@gmail.com">Mickaël Gaillard</maintainer>
+  <maintainer email="mick.gaillard@gmail.com">Mickael Gaillard</maintainer>
   <maintainer email="erwan.lehuitouze@gmail.com">Erwan Le Huitouze</maintainer>
-  <author email="mick.gaillard@gmail.com">Mickaël Gaillard</author>
+  <author email="mick.gaillard@gmail.com">Mickael Gaillard</author>
   <author email="erwan.lehuitouze@gmail.com">Erwan Le Huitouze</author>
 
   <license>GPLv3</license>
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>smarthome_common_driver</build_depend>
   <build_depend>rosjava_build_tools</build_depend>
+  <build_depend>smarthome_common_driver</build_depend>
 
   <run_depend>smarthome_common_driver</run_depend>
 

@@ -1,6 +1,6 @@
 //force project name
 //this is needed because repository contains multipackage and cause problem with release
-rootProject.name = 'media_onkyo_ip_driver'
+rootProject.name = 'smarthome_media_onkyo_driver'
 
 include '..:rosjava_dynamic_reconfigure' ,'..:smarthome_network_zeroconf',
     '..:smarthome_common_driver', 'lib:jeiscp'
