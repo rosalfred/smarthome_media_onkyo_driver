@@ -60,12 +60,10 @@ dependencies {
     compile 'org.ros.rosjava:rosjava_dynamic_reconfigure:[0,)'
     compile 'org.rosbuilding:smarthome_common_driver:[0,)'
 
-    compile project(':lib:jeiscp')
+    compile fileTree(dir: 'lib', include: '*.jar')
 
     //compile project('..:rosjava_dynamic_reconfigure')
     //compile project('..:smarthome_common_driver')
-
-    runtime fileTree(dir: 'libs', include: '*.jar')
 }
 
 startScripts {
