@@ -2,8 +2,8 @@
 Changelog for package smarthome_media_onkyo_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.64 (2016-06-08)
+-------------------
 * Add jeiscp library
 * Remove submodule
 * Contributors: Erwan Le Huitouze
