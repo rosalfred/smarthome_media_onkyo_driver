@@ -1,0 +1,37 @@
+# Travis file for ROS2 Java Application.
+#
+# VERSION 2
+
+language: generic
+
+services:
+  - docker
+
+env:
+  global:
+    - HOME_BUILD=${HOME}/build
+    - ROS2WS=${HOME_BUILD}/ros2_java_ws
+    - PYTHON_PATH=/usr/bin/python3
+    - COMMIT=${TRAVIS_COMMIT::8}
+
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+  - $HOME/.gradle
+
+before_install:
+- docker pull $DOCKER_REPO:$DOCKER_DIST
+- cd $HOME_BUILD && env | grep -E '^TRAVIS_' > .env && env | grep -E '^COVERALLS_' >> .env && env | grep -E '^CI_' >> .env && echo -e "CI_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER\nCI_PULL_REQUEST=$TRAVIS_PULL_REQUEST\nCI_BRANCH=$TRAVIS_BRANCH\nCI_BUILD_URL=$" >> .env
+- echo "INSTALL ALFRED WS..."
+- docker create -u 0 -it -w $ROS2WS --env-file .env --name artifact $DOCKER_REPO:$DOCKER_DIST /bin/bash
+- docker start artifact 
+- docker exec artifact sh -c "mkdir -p ${ROS2WS}/src && cd ${ROS2WS} && /usr/bin/wget https://gist.githubusercontent.com/Theosakamg/51f3e8670784db13d9190c58e3e57eb2/raw/ros2_alfred.repos && /usr/bin/vcs import src < ros2_alfred.repos"
+- docker cp $HOME_BUILD/$APP_PATH/. artifact:$ROS2WS/src/$APP_PATH
+- echo "BUILD ROS2 WS..."
+- docker exec artifact sh -c ". ${HOME_BUILD}/ament_ws/install_isolated/local_setup.sh && . ${HOME_BUILD}/ros2_java_ws/install_isolated/local_setup.sh && cd ${ROS2WS} && ament build --symlink-install --isolated --skip-packages $PKG_EXCLUDE --ament-gradle-args --parallel --daemon --configure-on-demand"
+
+script:
+- docker exec artifact sh -c ". ${HOME_BUILD}/ament_ws/install_isolated/local_setup.sh && . ${HOME_BUILD}/ros2_java_ws/install_isolated/local_setup.sh && cd ${ROS2WS} && . ./install_isolated/local_setup.sh && ament test --symlink-install --isolated --only-packages ${APP_NAME} --ament-gradle-args --parallel --daemon --configure-on-demand"
+- docker stop artifact && docker rm artifact
+
