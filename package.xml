@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
-<package>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+
+<package format="2">
   <name>smarthome_media_onkyo_driver</name>
-  <version>0.1.64</version>
+  <version>0.2.0</version>
   <description>This package is for interfacing Onkyo sound system (by JEISP API) to ROS. This package is part of Alfred Assistant stack.</description>
 
   <maintainer email="mick.gaillard@gmail.com">Mickael Gaillard</maintainer>
@@ -11,11 +13,21 @@
 
   <license>GPLv3</license>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_export_jars</buildtool_depend>
+  <buildtool_depend>ament_build_type_gradle</buildtool_depend>
 
-  <build_depend>rosjava_build_tools</build_depend>
+  <build_depend>rcljava</build_depend>
   <build_depend>smarthome_common_driver</build_depend>
+  <build_depend>smarthome_media_model</build_depend>
 
-  <run_depend>smarthome_common_driver</run_depend>
+  <exec_depend>rcljava</exec_depend>
+  <exec_depend>smarthome_common_driver</exec_depend>
+  <exec_depend>smarthome_media_model</exec_depend>
+
+  <export>
+    <architecture_independent/>
+    <build_type>ament_gradle</build_type>
+  </export>
 
 </package>

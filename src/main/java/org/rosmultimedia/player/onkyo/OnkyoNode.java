@@ -8,21 +8,23 @@
  */
 package org.rosmultimedia.player.onkyo;
 
-import org.ros.exception.ServiceException;
-import org.ros.node.ConnectedNode;
-import org.ros.node.Node;
-import org.ros.node.service.ServiceResponseBuilder;
-import org.rosbuilding.common.BaseNodeMain;
+import org.ros2.rcljava.RCLJava;
+import org.ros2.rcljava.namespace.GraphName;
+import org.ros2.rcljava.node.Node;
+import org.ros2.rcljava.node.service.RMWRequestId;
+import org.ros2.rcljava.node.service.ServiceCallback;
+import org.rosbuilding.common.BaseDriverNode;
 import org.rosbuilding.common.media.MediaMessageConverter;
 import org.rosbuilding.common.media.MediaStateDataComparator;
 import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
 
 import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
-import smarthome_media_msgs.MediaAction;
-import smarthome_media_msgs.StateData;
-import smarthome_media_msgs.ToggleMuteSpeaker;
-import smarthome_media_msgs.ToggleMuteSpeakerRequest;
-import smarthome_media_msgs.ToggleMuteSpeakerResponse;
+
+import smarthome_media_msgs.msg.StateData;
+import smarthome_media_msgs.msg.MediaAction;
+import smarthome_media_msgs.srv.ToggleMuteSpeaker_Request;
+import smarthome_media_msgs.srv.ToggleMuteSpeaker_Response;
+import smarthome_media_msgs.srv.MediaGetItem;
 
 
 /**
@@ -31,7 +33,7 @@ import smarthome_media_msgs.ToggleMuteSpeakerResponse;
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public class OnkyoNode extends BaseNodeMain<OnkyoConfig, StateData, MediaAction> {
+public class OnkyoNode extends BaseDriverNode<OnkyoConfig, StateData, MediaAction> {
 
     public static final String SRV_MUTE_SPEAKER_TOGGLE = "speaker_mute_toggle";
 
@@ -39,22 +41,11 @@ public class OnkyoNode extends BaseNodeMain<OnkyoConfig, StateData, MediaAction>
     private OnkyoSpeaker speaker;
 
     public OnkyoNode() {
-        super("onkyo",
+        super(
                 new MediaStateDataComparator(),
                 new MediaMessageConverter(),
-                MediaAction._TYPE,
-                StateData._TYPE);
-    }
-
-    @Override
-    public void onStart(final ConnectedNode connectedNode) {
-    	super.onStart(connectedNode);
-        this.startFinal();
-    }
-
-    @Override
-    public void onShutdown(Node node) {
-        super.onShutdown(node);
+                MediaAction.class.getName(),
+                StateData.class.getName());
     }
 
     @Override
@@ -119,24 +110,46 @@ public class OnkyoNode extends BaseNodeMain<OnkyoConfig, StateData, MediaAction>
         return isConnected;
     }
 
-    /**
-     * Initialize all node services.
-     */
-    protected void initServices() {
-        this.getConnectedNode().newServiceServer(
-                this.configuration.getPrefix() + SRV_MUTE_SPEAKER_TOGGLE,
-                ToggleMuteSpeaker._TYPE,
-                new ServiceResponseBuilder<ToggleMuteSpeakerRequest, ToggleMuteSpeakerResponse>() {
-                    @Override
-                    public void build(ToggleMuteSpeakerRequest request,
-                            ToggleMuteSpeakerResponse response) throws ServiceException {
-                        OnkyoNode.this.speaker.handleSpeakerMuteToggle(request, response);
-                    }
-                });
+    @Override
+    protected void initTopics() {
+        super.initTopics();
+
+        try {
+            this.getConnectedNode().<MediaGetItem>createService(MediaGetItem.class,
+                    GraphName.getFullName(this.connectedNode, SRV_MUTE_SPEAKER_TOGGLE, null),
+                    new ServiceCallback<ToggleMuteSpeaker_Request, ToggleMuteSpeaker_Response>() {
+                        @Override
+                        public void dispatch(
+                                final RMWRequestId header,
+                                final ToggleMuteSpeaker_Request request,
+                                final ToggleMuteSpeaker_Response response) {
+                            OnkyoNode.this.speaker.handleSpeakerMuteToggle(request, response);
+                        }
+                    });
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
-    protected OnkyoConfig getConfig() {
+    protected OnkyoConfig makeConfiguration() {
         return new OnkyoConfig(this.getConnectedNode());
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        RCLJava.rclJavaInit();
+
+        final OnkyoNode onkyo = new OnkyoNode();
+        final Node node = RCLJava.createNode("onkyo");
+
+        onkyo.onStart(node);
+        onkyo.onStarted();
+
+        RCLJava.spin(node);
+
+        onkyo.onShutdown();
+        onkyo.onShutdowned();
+
+        RCLJava.shutdown();
     }
 }

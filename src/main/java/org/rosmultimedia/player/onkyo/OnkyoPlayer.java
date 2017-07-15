@@ -8,11 +8,13 @@
  */
 package org.rosmultimedia.player.onkyo;
 
-import org.rosbuilding.common.media.IPlayer;
+import java.util.List;
+
+import org.rosbuilding.common.media.Player;
 import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
 
-import smarthome_media_msgs.MediaAction;
-import smarthome_media_msgs.StateData;
+import smarthome_media_msgs.msg.StateData;
+import smarthome_media_msgs.msg.MediaAction;
 
 /**
  * Onkyo Player module.
@@ -20,7 +22,7 @@ import smarthome_media_msgs.StateData;
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public class OnkyoPlayer implements IPlayer {
+public class OnkyoPlayer extends Player {
 	/**
 	 * Onkyo node.
 	 */
@@ -42,6 +44,11 @@ public class OnkyoPlayer implements IPlayer {
 		this.onkyoEiscp = onkyoEiscp;
 		this.onkyoNode = node;
 	}
+
+    @Override
+    protected void initializeAvailableMethods(List<String> arg0) {
+
+    }
 
 	@Override
 	public void callbackCmdAction(MediaAction message, StateData stateData) {

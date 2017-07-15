@@ -5,3 +5,5 @@
 #Eclipse files
 /.classpath
 /.settings
+
+.ament_dependencies.properties

@@ -8,47 +8,26 @@
  */
 package org.rosmultimedia.player.onkyo;
 
-import org.ros.node.ConnectedNode;
-import org.rosbuilding.common.NodeConfig;
+import org.ros2.rcljava.node.Node;
+import org.rosbuilding.common.NodeDriverConnectedConfig;
 
 /**
  *
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public class OnkyoConfig extends NodeConfig {
-
-    public static final String RATE = "rate";
-
-    private String mac;
-    private String host;
-    private int    port;
-
-    public OnkyoConfig(ConnectedNode connectedNode) {
-        super(connectedNode, "onkyo_salon", "fixed_frame", 1);
-    }
-
-    @Override
-    protected void loadParameters() {
-        super.loadParameters();
-
-        this.mac = this.connectedNode.getParameterTree()
-                .getString("~mac", "00:00:00:00:00:00");
-        this.host = this.connectedNode.getParameterTree()
-                .getString("~ip", "192.168.0.12");
-        this.port = this.connectedNode.getParameterTree()
-                .getInteger("~port", 60128);
-    }
-
-    public String getMac() {
-        return this.mac;
-    }
-
-    public String getHost() {
-        return this.host;
-    }
-
-    public int getPort() {
-        return this.port;
+public class OnkyoConfig extends NodeDriverConnectedConfig {
+    public OnkyoConfig(Node connectedNode) {
+        super(
+                connectedNode,
+                "/home/salon",
+                "onkyo",
+                "fixed_frame",
+                1,
+                "00:00:00:00:00:00",
+                "192.168.0.68",
+                60128L,
+                "",
+                "");
     }
 }

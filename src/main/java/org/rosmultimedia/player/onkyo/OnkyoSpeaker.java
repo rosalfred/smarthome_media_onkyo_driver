@@ -8,15 +8,17 @@
  */
 package org.rosmultimedia.player.onkyo;
 
-import org.rosbuilding.common.media.ISpeaker;
+import java.util.List;
+
+import org.rosbuilding.common.media.Speaker;
 import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
 
 import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
-import smarthome_media_msgs.MediaAction;
-import smarthome_media_msgs.SpeakerInfo;
-import smarthome_media_msgs.StateData;
-import smarthome_media_msgs.ToggleMuteSpeakerRequest;
-import smarthome_media_msgs.ToggleMuteSpeakerResponse;
+import smarthome_media_msgs.msg.StateData;
+import smarthome_media_msgs.msg.MediaAction;
+import smarthome_media_msgs.msg.SpeakerInfo;
+import smarthome_media_msgs.srv.ToggleMuteSpeaker_Request;
+import smarthome_media_msgs.srv.ToggleMuteSpeaker_Response;
 
 
 /**
@@ -25,7 +27,7 @@ import smarthome_media_msgs.ToggleMuteSpeakerResponse;
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public class OnkyoSpeaker implements ISpeaker {
+public class OnkyoSpeaker extends Speaker {
 	/**
 	 * Onkyo node.
 	 */
@@ -45,6 +47,16 @@ public class OnkyoSpeaker implements ISpeaker {
 		this.onkyoEiscp = onkyoEiscp;
 		this.onkyoNode = onkyoNode;
 	}
+
+    @Override
+    protected void initializeAvailableMethods(List<String> availableMethods) {
+        availableMethods.add(OP_MUTE);
+        availableMethods.add(OP_MUTE_TOGGLE);
+        availableMethods.add(OP_VOLUME_DOWN);
+        availableMethods.add(OP_VOLUME_UP);
+        availableMethods.add(OP_VOLUME_TO);
+        availableMethods.add(OP_CHANNEL);
+    }
 
 	@Override
 	public void load(StateData stateData) {
@@ -109,16 +121,15 @@ public class OnkyoSpeaker implements ISpeaker {
 	}
 
 	@Override
-	public void handleSpeakerMuteToggle(ToggleMuteSpeakerRequest request,
-			ToggleMuteSpeakerResponse response) {
+	public void handleSpeakerMuteToggle(ToggleMuteSpeaker_Request request,
+			ToggleMuteSpeaker_Response response) {
 		response.setState(!this.onkyoNode.getStateData().getSpeaker().getMuted());
 
 		this.onkyoNode.logI(String.format("Service call %s : %s",
 				OnkyoNode.SRV_MUTE_SPEAKER_TOGGLE,
 				this.onkyoNode.getStateData().getSpeaker().getMuted()));
 
-		MediaAction message = this.onkyoNode.getConnectedNode().getTopicMessageFactory()
-				.newFromType(MediaAction._TYPE);
+		MediaAction message = new MediaAction();
 
 		message.setMethod(OnkyoSpeaker.OP_MUTE_TOGGLE);
 

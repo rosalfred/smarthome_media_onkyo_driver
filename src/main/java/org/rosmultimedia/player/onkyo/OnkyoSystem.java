@@ -8,13 +8,15 @@
  */
 package org.rosmultimedia.player.onkyo;
 
-import org.rosbuilding.common.ISystem;
+import java.util.List;
+
+import org.rosbuilding.common.System;
 import org.rosmultimedia.player.onkyo.eiscp.OnkyoEiscp;
 
 import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
 
-import smarthome_media_msgs.MediaAction;
-import smarthome_media_msgs.StateData;
+import smarthome_media_msgs.msg.StateData;
+import smarthome_media_msgs.msg.MediaAction;
 
 /**
  * Onkyo System module.
@@ -22,7 +24,7 @@ import smarthome_media_msgs.StateData;
  * @author Erwan Le Huitouze <erwan.lehuitouze@gmail.com>
  *
  */
-public class OnkyoSystem implements ISystem<StateData, MediaAction> {
+public class OnkyoSystem extends System<StateData, MediaAction> {
 	/**
 	 * Onkyo node.
 	 */
@@ -41,6 +43,12 @@ public class OnkyoSystem implements ISystem<StateData, MediaAction> {
 	public OnkyoSystem(OnkyoEiscp onkyoEiscp, OnkyoNode onkyoNode) {
 		this.onkyoEiscp = onkyoEiscp;
 		this.onkyoNode = onkyoNode;
+	}
+
+	@Override
+    protected void initializeAvailableMethods(List<String> availableMethods) {
+	    availableMethods.add(OP_POWER);
+        availableMethods.add(OP_SHUTDOWN);
 	}
 
 	@Override

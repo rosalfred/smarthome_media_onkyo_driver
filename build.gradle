@@ -1,86 +1,35 @@
-buildscript {
-    String rosMavenPath = System.getenv("ROS_MAVEN_PATH")
-    String rosMavenRepository = System.getenv("ROS_MAVEN_REPOSITORY")
-    repositories {
-        if (rosMavenPath != null) {
-            rosMavenPath.tokenize(":").each { path ->
-                maven {
-                    // We can't use uri() here because we aren't running inside something
-                    // that implements the Script interface.
-                    url "file:${path}"
-                }
-            }
-        }
-        maven {
-            url "http://repository.springsource.com/maven/bundles/release"
-        }
-        maven {
-            url "http://repository.springsource.com/maven/bundles/external"
-        }
-        if (rosMavenRepository != null) {
-            maven {
-                url rosMavenRepository
-            }
-        }
-        maven {
-            url "https://github.com/rosjava/rosjava_mvn_repo/raw/master"
-        }
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.ros.rosjava_bootstrap:gradle_plugins:[0.2,0.3)"
-    }
+plugins {
+    id "org.ros2.rcljava" version "0.4.10"
 }
 
-apply plugin: 'application'
-apply plugin: 'ros-java'
-apply plugin: 'eclipse'
-apply plugin: 'maven'
-apply plugin: 'catkin'
+apply plugin: 'org.ros2.rcljava'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-defaultTasks 'install', 'installApp'
-
-mainClassName = 'org.ros.RosRun'
-
 group = 'org.rosmultimedia.player'
 
-allprojects {
-    version = project.catkin.pkg.version
+repositories {
+     jcenter()
 }
 
 dependencies {
-    compile 'org.ros.rosjava_core:rosjava:[0,)'
-    //compile 'org.ros.rosjava_messages:smarthome_comm_msgs:[0,)'
-    compile 'org.ros.rosjava_messages:smarthome_media_msgs:[0,)'
-    compile 'joda-time:joda-time:2.3'
-
-    compile 'org.ros.rosjava:rosjava_dynamic_reconfigure:[0,)'
-    compile 'org.rosbuilding:smarthome_common_driver:[0,)'
-
+    compile 'joda-time:joda-time:2.+'
+    compile 'com.google.guava:guava:19+'
     compile fileTree(dir: 'lib', include: '*.jar')
 
-    //compile project('..:rosjava_dynamic_reconfigure')
-    //compile project('..:smarthome_common_driver')
+    testCompile 'junit:junit:4.+'
+
+    runtime fileTree(dir: 'lib', include: '*.jar')
 }
 
-startScripts {
-    outputs.upToDateWhen { false }
+ament {
+    generateEclipse = true
 
-    doFirst {
-        delete fileTree(dir:'build/scripts')
-        delete fileTree(dir:'build/install')
-    }
-}
-
-installApp {
-    doLast {
-        File link = new File("build/scripts", "$project.name")
-		File target = new File(project.projectDir, "build/install/$project.name/bin/$project.name")
-
-		println "Creating symlink from $link.absolutePath to $target.absolutePath"
-		ant.symlink(link: link.absolutePath, resource: target.absolutePath, overwrite: true)
+    scripts {
+        main {
+            applicationName = project.name
+            mainClassName = 'org.rosmultimedia.player.onkyo.OnkyoNode'
+        }
     }
 }

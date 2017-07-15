@@ -29,7 +29,7 @@ import de.csmp.jeiscp.eiscp.EiscpCommmandsConstants;
 public class OnkyoEiscp {
 
 	private final String host;
-	private final int port;
+	private final long port;
 	private EiscpConnector eiscpConnector;
 	private Map<String, String> iscpResult;
 
@@ -42,7 +42,7 @@ public class OnkyoEiscp {
 
 	};
 
-	public OnkyoEiscp(String host, int port) {
+	public OnkyoEiscp(String host, long port) {
 		this.host = host;
 		this.port = port;
 
@@ -54,7 +54,7 @@ public class OnkyoEiscp {
 	private void initialize() {
 		try {
 			this.iscpResult.clear();
-			this.eiscpConnector = new EiscpConnector(this.host, this.port);
+			this.eiscpConnector = new EiscpConnector(this.host, (int) this.port);
 			this.eiscpConnector.attachListener(this.messageListener);
 		} catch (IOException e) {
 
