@@ -6,15 +6,15 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
             name 'Gradle'
         }
-        mavenLocal()
+//        mavenLocal()
     }
 
     apply from: 'https://gist.githubusercontent.com/Theosakamg/e67a28a61e6775e3129a5746f6d57aee/raw/ros2_java_version.gradle'
 //    apply from: '../modules.gradle'
 
     dependencies {
-        //classpath lib.rcljava
-        classpath "org.ros2.rcljava:rclJavaPlugin:0.5.3"
+        classpath lib.rcljava
+//        classpath "org.ros2.rcljava:rclJavaPlugin:${rootProject.config.gradle.rcljava}"
     }
 }
 
